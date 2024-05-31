@@ -1,4 +1,8 @@
 
+using Application;
+using Infrastructure;
+using Persistence;
+
 namespace API
 {
     public class Program
@@ -7,9 +11,15 @@ namespace API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Configuration.
+            var configuration = builder.Configuration;
 
+            // Add services to the container.
             builder.Services.AddControllers();
+            builder.Services.AddApplication();
+            builder.Services.AddPersistence(configuration);
+            builder.Services.AddInfrastructure(configuration);
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
