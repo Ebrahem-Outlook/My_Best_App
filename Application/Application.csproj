@@ -12,14 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Users\Events\UserEmailChanged\" />
-    <Folder Include="Users\Events\UserPasswordChanged\" />
-    <Folder Include="Users\Events\UserNameChanged\" />
-    <Folder Include="Users\Events\UserDeleted\" />
-    <Folder Include="Users\Events\UserCreated\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.9.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.1" />
     <PackageReference Include="MediatR" Version="12.2.0" />

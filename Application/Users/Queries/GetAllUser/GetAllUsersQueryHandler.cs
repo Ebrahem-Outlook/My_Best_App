@@ -1,29 +1,28 @@
 ﻿using Application.Core.Abstructions.Messaging;
 using Domain.Users;
 
-namespace Application.Users.Queries.GetAllUser
+namespace Application.Users.Queries.GetAllUser;
+
+internal sealed class GetAllUsersQueryHandler : IQueryHandler<GetAllUsersQuery, List<User>>
 {
-    internal sealed class GetAllUsersQueryHandler : IQueryHandler<GetAllUsersQuery, List<User>>
+    private readonly IUserRepository _userRepository;
+    
+    public GetAllUsersQueryHandler(IUserRepository userRepository)
     {
-        private readonly IUserRepository _userRepository;
-        
-        public GetAllUsersQueryHandler(IUserRepository userRepository)
+        _userRepository = userRepository;
+    }
+
+    public async Task<List<User>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+    {
+        try
         {
-            _userRepository = userRepository;
+            List<User> users = await _userRepository.GetAll() ?? throw new NullReferenceException();
+
+            return users;
         }
-
-        public async Task<List<User>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+        catch (NullReferenceException)
         {
-            try
-            {
-                List<User> users = await _userRepository.GetAll() ?? throw new NullReferenceException();
-
-                return users;
-            }
-            catch (NullReferenceException)
-            {
-                return new List<User>();
-            }
+            return new List<User>();
         }
     }
 }

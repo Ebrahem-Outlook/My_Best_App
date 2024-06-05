@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 
-namespace Application.Users.Queries.GetUserById
+namespace Application.Users.Queries.GetUserById;
+
+internal sealed class GetUserByIdQueryValidator : AbstractValidator<GetUserByIdQuery>
 {
-    internal sealed class GetUserByIdQueryValidator : AbstractValidator<GetUserByIdQuery>
+    public GetUserByIdQueryValidator()
     {
-        public GetUserByIdQueryValidator()
-        {
-            RuleFor(x => x.UserId).NotNull().NotEmpty();
-        }
+        RuleFor(x => x.UserId).NotNull().NotEmpty();
     }
 }

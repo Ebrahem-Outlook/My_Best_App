@@ -1,18 +1,17 @@
 ﻿using FluentValidation;
 
-namespace Application.Users.Commands.CreateUser
+namespace Application.Users.Commands.CreateUser;
+
+internal sealed class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
 {
-    public sealed class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
+    public CreateUserCommandValidator()
     {
-        public CreateUserCommandValidator()
-        {
-            RuleFor(x => x.FirstName).NotEmpty().NotNull();
+        RuleFor(x => x.FirstName).NotEmpty().NotNull();
 
-            RuleFor(x => x.LastName).NotEmpty().NotNull();
+        RuleFor(x => x.LastName).NotEmpty().NotNull();
 
-            RuleFor(x => x.Email).NotEmpty().NotNull();
+        RuleFor(x => x.Email).NotEmpty().NotNull();
 
-            RuleFor(x => x.Password).NotEmpty().NotNull();
-        }
+        RuleFor(x => x.Password).NotEmpty().NotNull();
     }
 }

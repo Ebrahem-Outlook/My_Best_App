@@ -2,26 +2,26 @@
 using Application.Core.Abstructions.Messaging;
 using Domain.Users;
 
-namespace Application.Users.Commands.DeleteUser;
+namespace Application.Users.Commands.UpdateEmail;
 
-internal sealed class DeleteUserCommandHandler : ICommandHandler<DeleteUserCommand, bool>
+internal sealed class UpdateUserEmailCommandHandler : ICommandHandler<UpdateUserEmailCommand, bool>
 {
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
+    public UpdateUserEmailCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<bool> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(UpdateUserEmailCommand request, CancellationToken cancellationToken)
     {
         try
         {
-            User user = await _userRepository.GetById(request.UserId) ?? throw new NullReferenceException();
+            var user = await _userRepository.GetById(request.UserId) ?? throw new NullReferenceException();
 
-            _userRepository.Delete(user);
+            user.ChangeEmail(request.Email);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 

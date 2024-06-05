@@ -1,29 +1,28 @@
 ﻿using Application.Core.Abstructions.Messaging;
 using Domain.Users;
 
-namespace Application.Users.Queries.GetUserByEmail
+namespace Application.Users.Queries.GetUserByEmail;
+
+internal sealed class GetUserByEmailQueryHandler : IQueryHandler<GetUserByEmailQuery, User>
 {
-    internal sealed class GetUserByEmailQueryHandler : IQueryHandler<GetUserByEmailQuery, User>
+    private readonly IUserRepository _userRepository;
+
+    public GetUserByEmailQueryHandler(IUserRepository userRepository)
     {
-        private readonly IUserRepository _userRepository;
+        _userRepository = userRepository;
+    }
 
-        public GetUserByEmailQueryHandler(IUserRepository userRepository)
+    public async Task<User> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
+    {
+        try
         {
-            _userRepository = userRepository;
+            User user = await _userRepository.GetByEmail(request.Email) ?? throw new NullReferenceException();
+
+            return user;
         }
-
-        public async Task<User> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
+        catch(NullReferenceException)
         {
-            try
-            {
-                User user = await _userRepository.GetByEmail(request.Email) ?? throw new NullReferenceException();
-
-                return user;
-            }
-            catch(NullReferenceException)
-            {
-                return new User();
-            }
+            return new User();
         }
     }
 }

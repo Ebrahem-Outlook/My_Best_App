@@ -1,29 +1,28 @@
 ﻿using Application.Core.Abstructions.Messaging;
 using Domain.Users;
 
-namespace Application.Users.Queries.GetUserById
+namespace Application.Users.Queries.GetUserById;
+
+internal sealed class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, User>
 {
-    internal sealed class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, User>
+    private readonly IUserRepository _userRepository;
+
+    public GetUserByIdQueryHandler(IUserRepository userRepository)
     {
-        private readonly IUserRepository _userRepository;
+        _userRepository = userRepository;
+    }
 
-        public GetUserByIdQueryHandler(IUserRepository userRepository)
+    public async Task<User> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+    {
+        try
         {
-            _userRepository = userRepository;
+            User user = await _userRepository.GetById(request.UserId) ?? throw new NullReferenceException();
+
+            return user;
         }
-
-        public async Task<User> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+        catch(NullReferenceException)
         {
-            try
-            {
-                User user = await _userRepository.GetById(request.UserId) ?? throw new NullReferenceException();
-
-                return user;
-            }
-            catch(NullReferenceException)
-            {
-                return new User();
-            }
+            return new User();
         }
     }
 }
